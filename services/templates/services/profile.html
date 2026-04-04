@@ -1,0 +1,114 @@
+{% extends "services/base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #eef2ff, #f8f9ff);
+    }
+
+    .profile-card {
+    max-width: 650px;
+    margin: auto;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: visible; /* change from hidden */
+}
+
+    .profile-header {
+        background: linear-gradient(135deg, #6a5cff, #8f94fb);
+        color: white;
+        text-align: center;
+        padding: 40px 20px 20px;
+        position: relative;
+    }
+
+    .profile-avatar {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        border: 5px solid white;
+        margin-top: -60px;
+        object-fit: cover;
+        background: #fff;
+        margin-top: -5px; 
+    }
+
+    .profile-body {
+        padding: 30px;
+    }
+
+    .profile-body p {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .profile-label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .logout-btn {
+        background: linear-gradient(135deg, #ff4b5c, #ff6b81);
+        border: none;
+        border-radius: 10px;
+        padding: 10px;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+        transform: scale(1.03);
+        box-shadow: 0 5px 15px rgba(255, 75, 92, 0.4);
+    }
+    body {
+    background: url("{% static 'images/profile-bg.avif' %}") no-repeat center center fixed;
+    background-size: cover; /* make it cover the whole viewport */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+</style>
+
+<div class="container mt-5">
+
+    <div class="profile-card">
+
+        <!-- HEADER -->
+        <div class="profile-header">
+            <h4>Welcome Back 👋</h4>
+        </div>
+
+        <!-- AVATAR -->
+        <div class="text-center">
+            <img src="{% static 'images/user1.jpg' %}" class="profile-avatar">
+            <h3 class="mt-2">{{ user.username }}</h3>
+            <p class="text-muted">Customer</p>
+        </div>
+
+        <!-- BODY -->
+        <div class="profile-body">
+
+            <p><span class="profile-label">Username:</span> {{ user.username }}</p>
+            <p><span class="profile-label">Email:</span> {{ user.email }}</p>
+
+            {% if user.first_name %}
+            <p><span class="profile-label">First Name:</span> {{ user.first_name }}</p>
+            {% endif %}
+
+            {% if user.last_name %}
+            <p><span class="profile-label">Last Name:</span> {{ user.last_name }}</p>
+            {% endif %}
+
+            <a href="{% url 'logout' %}" class="btn logout-btn w-100 mt-4 text-white">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'services/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .category-card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .category-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .category-img {
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .category-title {
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .hero {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                    url("{% static 'images/services-bg.avif' %}") center/cover no-repeat;
+        color: white;
+        padding: 70px 0;
+        border-radius: 15px;
+    }
+</style>
+
+<div class="container mt-5">
+
+    <!-- HERO -->
+    <div class="hero text-center mb-5">
+        <h1 class="fw-bold">✨ Explore Services Near You</h1>
+<p class="lead">Choose from trusted professionals in your area</p>
+        <p>Explore top categories available in your area</p>
+    </div>
+
+    <!-- CATEGORIES GRID -->
+    <div class="row g-4">
+
+    {% for category in categories %}
+    <div class="col-md-4">
+        <a href="{% url 'services_by_category' category.slug %}" style="text-decoration: none; color: inherit;">
+            <div class="card category-card">
+
+                {% if category.image %}
+                    <img src="{{ category.image.url }}" class="category-img w-100">
+                {% else %}
+                    <img src="{% static 'images/services-bg.avif' %}" class="category-img w-100">
+                {% endif %}
+
+                <div class="p-3 text-center">
+                    <div class="category-title">
+                        {{ category.name }}
+                    </div>
+                </div>
+
+            </div>
+        </a>
+    </div>
+    {% empty %}
+        <p class="text-center">No categories available.</p>
+    {% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}

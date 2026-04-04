@@ -1,0 +1,171 @@
+{% extends 'services/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ABOUT US HERO SECTION -->
+
+<section class="about-hero text-center py-5 position-relative">
+    <div class="container">
+        <h1 class="display-4 fw-bold">About <span class="text-primary">UrbanConnect</span></h1>
+        <p class="lead mt-3">Connecting you with trusted service providers in your city. Quick. Easy. Reliable.</p>
+        
+        <div class="d-flex justify-content-center align-items-stretch mt-4" style="gap: 10px;">
+            <!-- Main hero image -->
+            <img src="{% static 'images/about-hero.jpg' %}" alt="UrbanConnect" style="height: 300px; width: 33.33%; object-fit: cover; border-radius: 10px;">
+            <!-- Left side image -->
+            <img src="{% static 'images/about_hero-2.avif' %}" alt="Service Image" style="height: 300px; width: 33.33%; object-fit: cover; border-radius: 10px;">
+            <!-- Right side image -->
+            <img src="{% static 'images/about_hero-3.jpg' %}" alt="Service Image" style="height: 300px; width: 33.33%; object-fit: cover; border-radius: 10px;">
+        </div>
+    </div>
+</section>
+
+<!-- MISSION, VISION & VALUES -->
+<section class="py-5" style="background-color: #e6e6fa;"> <!-- light lavender background -->
+    <div class="container">
+        <!-- Section Title -->
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Our Mission, Vision & Core Values</h2>
+            <p class="lead text-muted">Building a seamless platform for trusted services and empowered service providers.</p>
+        </div>
+
+        <!-- Mission & Vision Cards -->
+        <div class="row g-4 mb-5">
+            <!-- Mission Card -->
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100 border-0 p-4">
+                    <div class="mb-3 text-center">
+                        <i class="bi bi-bullseye fs-1 text-primary"></i>
+                    </div>
+                    <h3 class="fw-bold text-center mb-3">Our Mission</h3>
+                    <p class="text-muted">
+                        To create a centralized marketplace that connects users with reliable service providers,
+                        making it easy to discover, book, and review services with confidence.
+                    </p>
+                    <ul class="text-start mt-2">
+                        <li>Seamless User Experience with responsive design</li>
+                        <li>Trust and Reliability through ratings & reviews</li>
+                        <li>Operational efficiency for service providers with a dedicated dashboard</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Vision Card -->
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100 border-0 p-4">
+                    <div class="mb-3 text-center">
+                        <i class="bi bi-eye-fill fs-1 text-primary"></i>
+                    </div>
+                    <h3 class="fw-bold text-center mb-3">Our Vision</h3>
+                    <p class="text-muted">
+                        To be the leading online service marketplace that automates home and personal care services, 
+                        creating a digitally connected ecosystem where users and service providers thrive.
+                    </p>
+                    <ul class="text-start mt-2">
+                        <li>Advanced service categorization for easy navigation</li>
+                        <li>Smart booking engine with real-time updates</li>
+                        <li>Secure authentication & seamless payment integration</li>
+                        <li>Mobile-first responsive design for all devices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Values -->
+        <div class="text-center mb-4">
+            <h3 class="fw-bold mb-4">Our Core Values</h3>
+        </div>
+        <div class="row g-4">
+            <!-- Trust -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="mb-3 text-center">
+                        <i class="bi bi-people-fill fs-1 text-primary"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2 text-center">Trust</h5>
+                    <p class="text-muted">We prioritize trustworthy connections between users and service providers, ensuring transparency and confidence in every interaction.</p>
+                </div>
+            </div>
+
+            <!-- Efficiency -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="mb-3 text-center">
+                        <i class="bi bi-speedometer2 fs-1 text-success"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2 text-center">Efficiency</h5>
+                    <p class="text-muted">Quick access to services that save time and simplify tasks, enabling users to get things done seamlessly.</p>
+                </div>
+            </div>
+
+            <!-- Reliability -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4">
+                    <div class="mb-3 text-center">
+                        <i class="bi bi-heart-fill fs-1 text-danger"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2 text-center">Reliability</h5>
+                    <p class="text-muted">Delivering consistent quality experiences every time, building long-term trust and loyalty with our users.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TEAM SECTION -->
+
+<!-- TEAM SECTION -->
+<section class="py-5" style="background-color: #f8f9fa;">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-5">Meet Our Team</h2>
+        <div class="row justify-content-center">
+            <!-- Member 1 -->
+            <div class="col-md-4 mb-4">
+                <img src="{% static 'images/Suha_profile.jpg' %}" 
+                     class="rounded-circle img-fluid mb-2 team-img" 
+                     alt="Team Member">
+                <h5>Suha Fathima</h5>
+                <p class="text-muted">Founder & CEO, Project Manager</p>
+            </div>
+
+            <!-- Member 2 -->
+            <div class="col-md-4 mb-4">
+                <img src="{% static 'images/Ilaa.jpeg' %}" 
+                     class="rounded-circle img-fluid mb-2 team-img" 
+                     alt="Team Member">
+                <h5>Ilakkia T</h5>
+                <p class="text-muted">Founder & CEO, Lead Designer</p>
+            </div>
+
+            <!-- Member 3 -->
+            <div class="col-md-4 mb-4">
+                <img src="{% static 'images/sri.jpeg' %}" 
+                     class="rounded-circle img-fluid mb-2 team-img" 
+                     alt="Team Member">
+                <h5>Srilekha Talluri</h5>
+                <p class="text-muted">Founder & CEO, Product Manager</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Add this CSS somewhere in your base CSS or <style> tag -->
+<style>
+.team-img {
+    width: 200px;      /* Fixed width */
+    height: 200px;     /* Fixed height */
+    object-fit: cover; /* Crop and fill without stretching */
+    display: inline-block;
+}
+</style>
+<!-- CALL TO ACTION -->
+<section class="py-5 text-center" style="background-color: #007bff; color: white;">
+    <div class="container">
+        <h2 class="fw-bold">Join UrbanConnect Today!</h2>
+        <p class="mb-4">Discover services near you or offer your expertise on our platform.</p>
+        <a href="{% url 'signup' %}" class="btn btn-light btn-lg fw-bold">Get Started</a>
+    </div>
+</section>
+
+{% endblock content %}

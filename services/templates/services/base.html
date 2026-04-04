@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head >
+    <meta charset="UTF-8">
+    <title>UrbanConnect</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="{% static 'images/home-bg.avif' %}">
+    <link rel="preload" as="image" href="{% static 'images/cleaning.jpeg' %}">
+    <link rel="preload" as="image" href="{% static 'images/plumbing.jpeg' %}">
+    <link rel="preload" as="image" href="{% static 'images/beauty_spa.webp' %}">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d3a5c9, #4b9eba, #8bb0c0);
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #111827, #1f2937);
+        }
+
+        .navbar-brand, .nav-link {
+            color: black !important;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            padding: 100px 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .btn-custom {
+            background: white;
+            color: #111827;
+            font-weight: 600;
+            border-radius: 30px;
+            padding: 10px 25px;
+            transition: 0.3s;
+        }
+
+        .btn-custom:hover {
+            transform: scale(1.05);
+            background: #f1f5f9;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            background: #111827;
+            color: white;
+            padding: 20px;
+            margin-top: 80px;
+        }
+      
+    table thead {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+    .btn-danger {
+    border-radius: 25px;
+}
+
+    .btn-outline-danger {
+    border-radius: 25px;
+}
+.active-link {
+    color: #4d7cff !important;
+    font-weight: 600;
+    position: relative;
+    text-shadow: 0 0 8px rgba(210, 151, 151, 0.6);
+}
+
+.active-link::after {
+    content: "";
+    width: 100%;
+    height: 3px;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    border-radius: 5px;
+}
+
+.uc-footer {
+    background-color: #e9ecef;   /* darker than white */
+    color: #222;                 /* strong text */
+}
+
+.uc-footer h5 {
+    font-weight: 600;
+    color: #000;
+}
+
+.uc-footer a {
+    color: #333;
+    text-decoration: none;
+}
+
+.uc-footer a:hover {
+    color: #6f42c1;
+    text-decoration: none;  /* purple hover (matches your buttons) */
+}
+
+.uc-footer i {
+    color: #444;
+}
+.pro-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;   /* 🔥 removes underline */
+    border-radius: 30px;
+
+    background: linear-gradient(90deg, #6a5cff, #a855f7);
+    
+    transition: all 0.3s ease;
+}
+
+
+/* Hover effect */
+.pro-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 20px rgba(168, 85, 247, 0.4);
+}
+.navbar .nav-link {
+    color: #ffffff !important;   /* white text */
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.navbar .nav-link:hover {
+    color: rgb(217, 217, 185) !important;   /* red hover */
+}
+
+.navbar .nav-link.active-link {
+    color: #ffd700 !important;   /* gold active */
+}
+
+    </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+       <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'home' %}">
+    <span style="color: white; font-size:22px;">UC</span>
+    <span class="ms-2" style="color: white;">Urban Connect</span>
+</a>
+        <div class="collapse navbar-collapse justify-content-end">
+           <ul class="navbar-nav">
+
+{% if user.is_authenticated %}
+         {% url 'profile' as profile_url %}
+<li class="nav-item">
+    <a class="nav-link {% if request.path == profile_url %}active-link{% endif %}" href="{{ profile_url }}">
+        <i class="bi bi-person-circle"></i> Profile
+    </a>
+</li>
+
+
+    {% url 'home' as home_url %}
+    <li class="nav-item">
+        <a class="nav-link {% if request.path == home_url %}active-link{% endif %}" href="{{ home_url }}">
+            <i class="bi bi-house-door-fill"></i> Home
+        </a>
+    </li>
+
+    {% url 'dashboard' as dashboard_url %}
+    <li class="nav-item">
+        <a class="nav-link {% if request.path == dashboard_url %}active-link{% endif %}" href="{{ dashboard_url }}">
+            Dashboard
+        </a>
+    </li>
+
+    {% url 'my_bookings' as bookings_url %}
+    <li class="nav-item">
+        <a class="nav-link {% if request.path == bookings_url %}active-link{% endif %}" href="{{ bookings_url }}">
+            <i class="bi bi-calendar-check"></i> My Bookings
+        </a>
+    </li>
+   
+    <li class="nav-item">
+        <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+    {% csrf_token %}
+    <button  type="submit" class="btn btn-link nav-link">
+        Logout
+    </button>
+</form>
+    </li>
+
+{% else %}
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">
+            Login
+        </a>
+    </li>
+
+{% endif %}
+
+</ul>
+        </div>
+    </div>
+</nav>
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer class="uc-footer mt-5">
+  <div class="container py-5">
+
+    <div class="row">
+      
+      <!-- Logo -->
+      <div class="col-md-3 mb-4">
+        <h4>
+    <a href="{% url 'home' %}" style="text-decoration:none; color:inherit;">
+        <strong>UC</strong> Urban Connect
+    </a>
+</h4>
+      </div>
+
+      <!-- Connect -->
+      <div class="col-md-3">
+        <h5>Connect</h5>
+        <ul class="list-unstyled">
+          <li><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+          <li><a href="{% url 'investors' %}">Investor Relations</a></li>
+        <li><a href="{% url 'terms' %}">Terms & conditions</a></li>
+        <li><a href="{% url 'privacy' %}">Privacy policy</a></li>
+        <li><a href="{% url 'anti_discrimination' %}">Anti-discrimination policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Customers -->
+      <div class="col-md-3">
+        <h5>For customers</h5>
+        <ul class="list-unstyled">
+         <li><a href="{% url 'reviews' %}">UC reviews</a></li>
+        <li><a href="{% url 'categories' %}">Categories near you</a></li>
+        <li><a href="{% url 'contact' %}">Contact us</a></li>
+        </ul>
+      </div>
+
+      <!-- Professionals -->
+      <div class="col-md-3">
+        <h5>For professionals</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'register_professional' %}" class="pro-btn">
+    Register as Professional
+</a></li>
+        </ul>
+
+        <!-- Social Icons -->
+        <div class="mt-3">
+          <i class="bi bi-twitter me-2"></i>
+          <i class="bi bi-facebook me-2"></i>
+          <i class="bi bi-instagram me-2"></i>
+          <i class="bi bi-linkedin"></i>
+        </div>
+
+        <!-- App Buttons -->
+        <div class="mt-3">
+          <img src="{% static 'images/app_store.webp' %}" width="140">
+          <img src="{% static 'images/play_store.webp' %}" width="140">
+        </div>
+      </div>
+
+    </div>
+
+    <hr>
+
+    <!-- Bottom text -->
+    <div class="text-center small text-muted">
+      <p>* As on April 1, 2026</p>
+      <p>
+        © 2026 Urban Connect Limited. All rights reserved.
+      </p>
+    </div>
+
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

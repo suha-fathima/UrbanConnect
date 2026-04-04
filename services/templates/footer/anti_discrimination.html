@@ -1,0 +1,116 @@
+{% extends 'services/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .hero {
+        background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+                    url("{% static 'images/inclusive.webp' %}") center/cover no-repeat;
+        color: white;
+        padding: 80px 0;
+        border-radius: 15px;
+    }
+
+    .policy-card {
+        border-radius: 15px;
+        transition: 0.3s;
+    }
+
+    .policy-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .icon {
+        font-size: 30px;
+    }
+
+    .highlight-box {
+        background: #f8f9fa;
+        border-left: 5px solid #000;
+        padding: 15px;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="container mt-5">
+
+    <!-- HERO -->
+    <div class="hero text-center mb-5">
+        <h1 class="fw-bold">🛡️ Anti-Discrimination Policy</h1>
+        <p class="mt-3">Creating a safe, inclusive, and respectful community for everyone</p>
+    </div>
+
+    <!-- INTRO -->
+    <div class="card p-4 shadow-sm mb-4">
+        <p>
+            At <strong>UrbanConnect</strong>, we are committed to building a platform
+            where everyone feels valued, respected, and safe. We strongly believe
+            in equality and inclusivity across all services and interactions.
+        </p>
+    </div>
+
+    <!-- POLICY SECTIONS -->
+    <div class="row g-4">
+
+        <!-- Zero Tolerance -->
+        <div class="col-md-4">
+            <div class="card policy-card p-4 shadow-sm text-center h-100">
+                <div class="icon mb-3">🚫</div>
+                <h5 class="fw-bold">Zero Tolerance</h5>
+                <p class="text-muted">
+                    Discrimination based on religion, gender, caste, ethnicity,
+                    disability, or identity is strictly prohibited on our platform.
+                </p>
+            </div>
+        </div>
+
+        <!-- Equal Opportunity -->
+        <div class="col-md-4">
+            <div class="card policy-card p-4 shadow-sm text-center h-100">
+                <div class="icon mb-3">🤝</div>
+                <h5 class="fw-bold">Equal Opportunity</h5>
+                <p class="text-muted">
+                    We ensure fair access to services for both customers and
+                    professionals, without bias or prejudice.
+                </p>
+            </div>
+        </div>
+
+        <!-- Safe Platform -->
+        <div class="col-md-4">
+            <div class="card policy-card p-4 shadow-sm text-center h-100">
+                <div class="icon mb-3">🛡️</div>
+                <h5 class="fw-bold">Safe Environment</h5>
+                <p class="text-muted">
+                    We continuously monitor and improve our platform to maintain
+                    a respectful and secure environment.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- REPORT SECTION -->
+    <div class="card p-4 shadow-sm mt-5">
+        <h4 class="mb-3">⚠️ Reporting Discrimination</h4>
+
+        <div class="highlight-box">
+            <p class="mb-0">
+                If you experience or witness any form of discrimination,
+                please report it immediately through our contact page.
+                Our team will take prompt and appropriate action.
+            </p>
+        </div>
+    </div>
+
+    <!-- IMAGE SECTION -->
+    <div class="mt-5 text-center">
+        <img src="{% static 'images/diversity.webp' %}" 
+             class="img-fluid rounded-4 shadow" 
+             style="max-height: 350px; object-fit: cover;">
+    </div>
+
+</div>
+
+{% endblock %}

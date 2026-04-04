@@ -1,0 +1,127 @@
+{% extends 'services/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .review-card {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .review-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .avatar {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ddd;
+    }
+
+    .star {
+        color: #ffc107;
+        font-size: 18px;
+    }
+
+    .review-form {
+        border-radius: 15px;
+    }
+
+    .submit-btn {
+        background: linear-gradient(45deg, #000, #444);
+        color: white;
+        border: none;
+        transition: 0.3s;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(45deg, #222, #666);
+    }
+</style>
+
+<div class="container mt-5">
+
+    <!-- Title -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">🌟 Customer Reviews</h2>
+        <p class="text-muted">Trusted by hundreds of happy users</p>
+    </div>
+
+    <!-- Reviews Grid -->
+    <div class="row g-4">
+
+        <!-- Review 1 -->
+        <div class="col-md-4">
+            <div class="card review-card p-4 shadow-sm text-center">
+                <img src="{% static 'images/user1.jpg' %}" class="avatar mx-auto mb-3">
+                <h6 class="fw-bold">Rahul</h6>
+                <div class="star mb-2">⭐⭐⭐⭐⭐</div>
+                <p class="text-muted">"Amazing service! Very professional and quick."</p>
+            </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="col-md-4">
+            <div class="card review-card p-4 shadow-sm text-center">
+                <img src="{% static 'images/user2.jpg' %}" class="avatar mx-auto mb-3">
+                <h6 class="fw-bold">Priya</h6>
+                <div class="star mb-2">⭐⭐⭐⭐</div>
+                <p class="text-muted">"Great experience. Will book again!"</p>
+            </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="col-md-4">
+            <div class="card review-card p-4 shadow-sm text-center">
+                <img src="{% static 'images/user3.jpg' %}" class="avatar mx-auto mb-3">
+                <h6 class="fw-bold">Arjun</h6>
+                <div class="star mb-2">⭐⭐⭐⭐⭐</div>
+                <p class="text-muted">"Highly recommended platform!"</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Divider -->
+    <hr class="my-5">
+
+    <!-- Review Form -->
+    <div class="card review-form shadow p-4">
+        <h4 class="mb-4">✍️ Leave a Review</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Rating -->
+            <div class="mb-3">
+                <label class="form-label">Rating</label>
+                <select class="form-select" name="rating" required>
+                    <option value="">Select Rating</option>
+                    <option>⭐⭐⭐⭐⭐ - Excellent</option>
+                    <option>⭐⭐⭐⭐ - Very Good</option>
+                    <option>⭐⭐⭐ - Good</option>
+                    <option>⭐⭐ - Fair</option>
+                    <option>⭐ - Poor</option>
+                </select>
+            </div>
+
+            <!-- Comment -->
+            <div class="mb-3">
+                <label class="form-label">Your Review</label>
+                <textarea class="form-control" rows="4" placeholder="Share your experience..." required></textarea>
+            </div>
+
+            <!-- Button -->
+            <button type="submit" class="btn submit-btn w-100">
+                Submit Review 🚀
+            </button>
+
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,363 @@
+{% extends 'services/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- 🔥 HERO SECTION -->
+<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+
+    <!-- ✅ REQUIRED WRAPPER -->
+    <div class="carousel-inner">
+
+        <div class="carousel-item active">
+            <div class="hero-slide" style="background-image: url('{% static "images/cozy.avif" %}');"></div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="hero-slide" style="background-image: url('{% static 'images/gardening.avif' %}');"></div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="hero-slide" style="background-image: url('{% static 'images/petss.avif' %}');"></div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="hero-slide" style="background-image: url('{% static 'images/spa-bg.avif' %}');"></div>
+        </div>
+
+    </div>
+
+    <!-- 🔥 GLOBAL CONTENT (THIS IS THE KEY) -->
+       <div class="hero-overlay">
+    <div class="hero-content text-center text-white">
+        <h1 class="fw-bold display-5 mb-3" style="color: black;">Your to-do list is on us.</h1>
+        <p class="mb-4" style="color: black;">Book trusted professionals for all your home needs</p>
+
+        <form method="GET" action="{% url 'home' %}" class="d-flex justify-content-center flex-wrap">
+            <input type="text" name="q" class="form-control search-bar" placeholder="Search services...">
+            <button type="submit" class="btn btn-primary ms-2 px-4 rounded-pill">Search</button>
+        </form>
+
+        <a href="{% url 'all_services' %}" class="btn btn-light mt-3 px-4 rounded-pill">
+            Explore All Services
+        </a>
+    </div>
+       </div>
+
+    <!-- ARROWS -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+</div>
+
+<!-- 🔥 CATEGORY CARDS (LIKE TASKRABBIT TOP SECTION) -->
+<div class="container-fluid p-0">
+    {% if query %}
+    <h4 class="text-center mt-4">
+        Results for "{{ query }}"
+    </h4>
+{% endif %}
+    <h3 class="text-center fw-bold mb-4">Explore Categories</h3>
+
+    <div class="row g-4">
+    {% for category in categories|slice:":6" %}
+    <div class="col-md-4">
+        <a href="{% url 'services_by_category' category.slug %}" class="text-decoration-none text-dark">
+            
+            <div class="category-card">
+
+    {% if category.image %}
+        <img src="{{ category.image.url }}">
+    {% else %}
+        <img src="{% static 'images/default.jpg' %}">
+    {% endif %}
+
+    <div class="p-3">
+        <h5>{{ category.name }}</h5>
+        <button class="btn btn-outline-primary rounded-pill px-3 mt-2">
+                Explore Services
+            </button>
+    </div>
+</div>
+
+        </a>
+    </div>
+    {% endfor %}
+</div>
+</div>
+<div class="text-center mt-4">
+    <a href="{% url 'categories' %}" class="btn btn-outline-dark rounded-pill px-4">
+        View All Categories →
+    </a>
+</div>
+{% if query %}
+<div class="container mt-4">
+    <h3 class="text-center mb-3">Matching Services</h3>
+
+    <div class="row">
+        {% for service in services %}
+        <div class="col-md-4">
+            <div class="card mb-3">
+
+                {% if service.image %}
+                    <img src="{{ service.image.url }}" class="card-img-top">
+                {% endif %}
+
+                <div class="card-body text-center">
+                    <h5>{{ service.title }}</h5>
+                    <p class="small text-muted">
+                        {{ service.description|truncatewords:10 }}
+                    </p>
+                    <p class="fw-bold text-primary">₹{{ service.price }}</p>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-center text-muted">No services found 😢</p>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!--  POPULAR SERVICES -->
+<div class="container-fluid p-0">
+    <h3 class="text-center fw-bold mb-4">Popular Services</h3>
+
+    <div id="serviceCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+
+        {% for service in services %}
+            {% if forloop.counter0|divisibleby:3 %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row">
+            {% endif %}
+
+            <div class="col-md-4">
+                <div class="card service-card border-0 rounded-4 mb-3">
+
+                    {% if service.image %}
+                        <img src="{{ service.image.url }}" class="card-img-top">
+                    {% else %}
+                        <img src="{% static 'images/default.jpg' %}" class="card-img-top">
+                    {% endif %}
+
+                    <div class="card-body text-center">
+                        <h5>{{ service.title }}</h5>
+                        <p class="text-muted small">{{ service.description|truncatewords:10 }}</p>
+                        <p class="fw-bold text-primary">₹{{ service.price }}</p>
+
+                        <a href="{% url 'book_service' service.id %}" class="btn btn-primary rounded-pill px-4">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {% if forloop.counter|divisibleby:3 or forloop.last %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#serviceCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+
+        <button class="carousel-control-next" type="button" data-bs-target="#serviceCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</div>
+
+{% if services|length == 0 %}
+    <p class="text-center text-muted mt-4">No services found 😢</p>
+{% endif %}
+
+
+
+<!-- 🔥 STYLES -->
+<style>
+
+/* HERO */
+/* REMOVE ALL SIDE GAPS */
+body, html {
+    margin: 0;
+    padding: 0;
+}
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 450px;
+    z-index: 10;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    z-index: 20; /* make arrows above overlay */
+}
+/* HERO FULL WIDTH */
+#heroCarousel {
+    width: 100vw;        /* 🔥 full viewport width */
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+/* REMOVE BOOTSTRAP INNER SPACING */
+.carousel-inner,
+.carousel-item,
+.hero-slide {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 450px; 
+}
+.carousel-inner {
+    overflow: hidden;
+}
+
+
+
+/* FIX IMAGE COVER */
+.hero-slide {
+   height: 450px;   /* 🔥 REQUIRED */
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 6s ease;
+}
+
+
+.carousel-item.active .hero-slide {
+    transform: scale(1.05);
+}
+/* SEARCH */
+.search-bar {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 30px;
+    padding: 12px 20px;
+}
+
+/* CATEGORY CARDS */
+.category-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.category-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+}
+
+/* SERVICE CARDS */
+.service-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+.service-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-card .card-body {
+    flex-grow: 1;
+}
+
+.card {
+    height: 100%;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* BUTTON */
+.btn-primary {
+    background-color: #5b3cc4;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #472ea3;
+}
+
+/* CAROUSEL */
+
+.carousel-item {
+      padding: 0px;
+    transition: transform 1.2s ease-in-out;
+    
+}
+
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 50%;
+    padding: 15px;
+}
+body {
+    background: linear-gradient(135deg, #d3a5c9, #4b9eba, #8bb0c0);
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+.hero-slide {
+    position: relative;
+    height: 450px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* 🔥 THIS IS THE MAGIC */
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* perfect center */
+
+    color: white;
+    text-align: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+/* Optional: make text pop */
+.hero-content h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.search-box {
+    margin-top: 20px;
+}
+
+</style>
+
+{% endblock %}

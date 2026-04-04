@@ -1,0 +1,197 @@
+{% extends "services/base.html" %}
+{% load static %}  <!-- Make sure to load static at the top -->
+
+{% block content %}
+<head>
+    <style>
+table td, table th {
+    white-space: nowrap;
+}
+</style>
+</head>
+
+<!-- Home Logo / Button -->
+<div class="mb-4 text-start">
+    <a href="{% url 'home' %}" class="home-logo">
+        <img src="{% static 'images/home_icon.png' %}" alt="Home" width="50" height="50">
+        <span class="fw-bold ms-2">Home</span>
+    </a>
+</div>
+
+<div class="text-center mb-5">
+    <h1 class="fw-bold">My Bookings</h1>
+    <p class="text-muted">Here are your recent service bookings</p>
+</div>
+
+
+{% if services %}
+<div class="container">
+    <form method="POST" action="{% url 'checkout' %}">
+        {% csrf_token %}
+
+        <div class="row">
+
+            <!-- LEFT SIDE (TABLE) -->
+            <div class="col-md-8">
+    <!-- ✅ Make table scrollable -->
+    <div style="overflow-x:auto;">
+        <table class="table align-middle">
+
+            <thead style="background-color:#ff4d4d; color:white;">
+                <tr>
+                    
+                    <th>Service</th>
+                    <th>Price</th>
+                    <th style="min-width:180px;">Professional</th> 
+                    <th style="min-width:150px;">Date</th>
+                    <th style="min-width:120px;">Time</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <input type="hidden" name="service_id_{{ forloop.counter }}" value="{{ service.id }}">
+
+                    
+
+                    <td>{{ service.title }}</td>
+                    <td class="service-price" data-base-price="{{ service.price }}">
+    ₹{{ service.price }}
+</td>
+
+                    <td style="min-width:180px;">
+    <select name="professional_{{ forloop.counter }}" class="form-select w-100 professional-select">
+        <option value="">Select</option>
+
+        {% for pro in professionals %}
+            {% if pro.service == service.title and pro.availability %}
+                <option value="{{ pro.id }}" data-price="{{ pro.price }}">
+                    {{ pro.name }} (⭐{{ pro.rating }}) - ₹{{ pro.price }}
+                </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</td>
+
+                    <!-- ✅ FIXED DATE -->
+                    <td style="min-width:150px;">
+                        <input type="date" name="date_{{ forloop.counter }}" class="form-control w-100" required>
+                    </td>
+
+                    <!-- ✅ FIXED TIME -->
+                    <td style="min-width:120px;">
+                        <select class="form-select w-100" name="time_{{ forloop.counter }}">
+                            <option value="10:00">10:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="14:00">14:00</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+                    </td>
+
+</form>
+<td>
+    <!-- ✅ Separate form (NOT affected by date validation) -->
+    <form method="POST" action="{% url 'delete_service' service.id %}">
+        {% csrf_token %}
+        <button type="submit"
+            onclick="return confirm('Remove this service?')"
+            style="border:none; background:none;"
+            class="text-danger">
+            🗑️
+        </button>
+    </form>
+</td>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+            <!-- RIGHT SIDE (SUMMARY) -->
+            <div class="col-md-4">
+                <div class="border p-4 rounded shadow-sm">
+
+                    <h5>Summary</h5>
+
+                    <p>Subtotal: ₹<span id="subtotal">0</span></p>
+                    <p>Tax (10%): ₹<span id="tax">0</span></p>
+                    <h4>Total: ₹<span id="total">0</span></h4>
+
+                    <button type="submit" class="btn btn-danger w-100 mt-3">
+                        Checkout
+                    </button>
+
+                    <a href="{% url 'home' %}" class="btn btn-outline-danger w-100 mt-2">
+                        Continue Browsing
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+{% else %}
+<!-- EMPTY CART UI -->
+<div class="text-center mt-5">
+    <h5>🛒 Cart is empty</h5>
+    <a href="{% url 'home' %}" class="btn btn-outline-danger mt-3">
+        Browse Services
+    </a>
+</div>
+{% endif %}
+<script>
+function updateSummary() {
+    let subtotal = 0;
+
+    document.querySelectorAll('.service-price').forEach(cell => {
+        let price = parseFloat(cell.innerText.replace('₹', '')) || 0;
+        subtotal += price;
+    });
+
+    let tax = subtotal * 0.10;
+    let total = subtotal + tax;
+
+    document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+    document.getElementById('tax').innerText = tax.toFixed(2);
+    document.getElementById('total').innerText = total.toFixed(2);
+}
+
+// 👇 THIS PART CONNECTS TO YOUR DROPDOWN
+document.querySelectorAll('.professional-select').forEach(dropdown => {
+
+    dropdown.addEventListener('change', function () {
+
+        let selectedOption = this.options[this.selectedIndex];
+        let newPrice = selectedOption.getAttribute('data-price');
+
+        let row = this.closest('tr'); // find same row
+        let priceCell = row.querySelector('.service-price');
+
+        if (newPrice) {
+            priceCell.innerText = "₹" + newPrice;
+        } else {
+            let basePrice = priceCell.getAttribute('data-base-price');
+            priceCell.innerText = "₹" + basePrice;
+        }
+
+        updateSummary(); // 🔥 update totals
+    });
+
+});
+
+// Run once on load
+updateSummary();
+</script>
+{% endblock %}

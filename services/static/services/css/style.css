@@ -1,0 +1,29 @@
+body {
+    background: linear-gradient(to right, #4e54c8, #8f94fb);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    background-color: #ffffff;
+}
+
+.btn-primary {
+    background: #4e54c8;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #8f94fb;
+}
+.home-logo img {
+    vertical-align: middle;
+    transition: transform 0.2s;
+}
+
+.home-logo:hover img {
+    transform: scale(1.2);
+}
+
+.home-logo span {
+    vertical-align: middle;
+}

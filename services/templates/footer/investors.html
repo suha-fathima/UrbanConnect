@@ -1,0 +1,135 @@
+{% extends 'services/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .hero {
+        background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+                    url("{% static 'images/finance-bg.avif' %}") center/cover no-repeat;
+        color: white;
+        padding: 80px 0;
+        border-radius: 15px;
+    }
+
+    .info-card {
+        border-radius: 15px;
+        transition: 0.3s;
+    }
+
+    .info-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .stat-box {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+    }
+
+    .cta-box {
+        background: linear-gradient(45deg, #000, #444);
+        color: white;
+        border-radius: 15px;
+        padding: 30px;
+    }
+</style>
+
+<div class="container mt-5">
+
+    <!-- HERO -->
+    <div class="hero text-center mb-5">
+        <h1 class="fw-bold">📊 Investor Relations</h1>
+        <p class="mt-3">Partner with UrbanConnect — Building the future of service marketplaces</p>
+    </div>
+
+    <!-- INTRO -->
+    <div class="card p-4 shadow-sm mb-4">
+        <p>
+            <strong>UrbanConnect</strong> is a fast-growing digital platform that connects
+            customers with reliable service professionals. Our mission is to simplify
+            everyday services through technology, trust, and convenience.
+        </p>
+    </div>
+
+    <!-- STATS -->
+    <div class="row text-center mb-5 g-4">
+
+        <div class="col-md-4">
+            <div class="stat-box shadow-sm">
+                <h3 class="fw-bold">10K+</h3>
+                <p class="text-muted">Users</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-box shadow-sm">
+                <h3 class="fw-bold">500+</h3>
+                <p class="text-muted">Service Providers</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-box shadow-sm">
+                <h3 class="fw-bold">25+</h3>
+                <p class="text-muted">Cities</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- DETAILS -->
+    <div class="row g-4">
+
+        <!-- Growth -->
+        <div class="col-md-6">
+            <div class="card info-card p-4 shadow-sm h-100">
+                <h5 class="fw-bold">📈 Growth</h5>
+                <p class="text-muted">
+                    UrbanConnect is scaling rapidly with increasing demand for
+                    on-demand home and professional services. Our platform is designed
+                    for high scalability and long-term growth.
+                </p>
+            </div>
+        </div>
+
+        <!-- Opportunities -->
+        <div class="col-md-6">
+            <div class="card info-card p-4 shadow-sm h-100">
+                <h5 class="fw-bold">💼 Investment Opportunities</h5>
+                <p class="text-muted">
+                    We are actively seeking investors who are passionate about
+                    innovation, digital marketplaces, and building impactful solutions.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- IMAGE + TEXT -->
+    <div class="row mt-5 align-items-center">
+        <div class="col-md-6">
+            <img src="{% static 'images/start.avif' %}" 
+                 class="img-fluid rounded-4 shadow">
+        </div>
+        <div class="col-md-6">
+            <h4 class="fw-bold">🚀 Why Invest in Us?</h4>
+            <ul class="text-muted">
+                <li>Strong market demand</li>
+                <li>Scalable business model</li>
+                <li>Technology-driven platform</li>
+                <li>Growing customer base</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-box text-center mt-5">
+        <h4 class="fw-bold mb-3">📧 Interested in Investing?</h4>
+        <p>Reach out to us and be part of our growth journey.</p>
+        <p class="fw-bold">investors@urbanconnect.com</p>
+    </div>
+
+</div>
+
+{% endblock %}

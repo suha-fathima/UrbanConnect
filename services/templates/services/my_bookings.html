@@ -1,0 +1,392 @@
+{% extends "services/base.html" %}
+{% load static %}
+
+{% block content %}
+<head>
+    <style>
+        .chat-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 999;
+}
+
+.chat-header {
+    background: #ff4d4d;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat-messages {
+    height: 200px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.chat-input {
+    display: flex;
+}
+
+.chat-input input {
+    flex: 1;
+    border: none;
+    padding: 8px;
+}
+
+.chat-input button {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px;
+}
+    </style>
+</head>
+
+<div class="container mt-4">
+
+    <h2 class="text-center mb-4">📋 My Bookings</h2>
+
+    {% if bookings %}
+    <table class="table table-bordered text-center align-middle">
+
+        <thead style="background-color:#ff4d4d; color:white;">
+            <tr>
+                <th>Service</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Professional</th>
+                <th>Status</th>
+                <th>Chat</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>
+                    {% if booking.service.image %}
+                  <img src="{{ booking.service.image.url }}" width="70" height="70" style="object-fit:cover; border-radius:10px;">
+                    {% else %}
+                <img src="{% static 'images/sample.jpg' %}" width="70">
+                  {% endif %}
+                </td>
+
+                <td>{{ booking.service.title }}</td>
+                <td>
+                ₹{{ booking.total_price|floatformat:2 }} <br>
+                <small class="text-muted">(incl. tax)</small>
+                </td>
+                <td>{{ booking.appointment_date|date:"d M Y" }}</td>
+                <td>{{ booking.appointment_time|time:"H:i" }}</td>
+                <td>
+                {% if booking.professional %}
+                    {{ booking.professional.name }}
+                    {% else %}
+                    Not Assigned
+                {% endif %}
+                </td>
+
+                <td>
+                    <span class="badge 
+                        {% if booking.status == 'Pending' %} bg-warning text-dark
+                        {% elif booking.status == 'Confirmed' %} bg-success
+                        {% elif booking.status == 'Completed' %} bg-primary
+                        {% else %} bg-secondary
+                        {% endif %}
+                    ">
+                        {{ booking.status }}
+                    </span>
+                </td>
+                <td>
+    {% if booking.status == "Confirmed" and booking.professional %}
+        <button class="btn btn-sm btn-outline-primary"
+                onclick="openChat('{{ booking.service.title }}', '{{ booking.professional.name }}')">
+            💬 Chat
+        </button>
+    {% elif booking.status == "Confirmed" %}
+        <span class="text-muted">No Professional Assigned</span>
+    {% else %}
+        <span class="text-muted">Not Available</span>
+    {% endif %}
+</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+    {% else %}
+        <p class="text-center">No bookings yet</p>
+    {% endif %}
+
+</div>
+<!-- CHAT BOX -->
+<div id="chatBox" class="chat-box shadow">
+    <div class="chat-header">
+        <span id="chatTitle">Chat</span>
+        <button onclick="closeChat()" style="background:none; border:none; color:white; font-size:16px;">
+    ✖
+</button>
+    </div>
+
+    <div id="chatMessages" class="chat-messages"></div>
+
+    <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+let currentPro = "";
+
+function openChat(serviceName, proName) {
+    currentPro = proName;
+    let key = serviceName + "_" + proName;
+
+    document.getElementById("chatBox").style.display = "flex";
+    document.getElementById("chatTitle").innerText =
+        proName + " • " + serviceName;
+
+    let savedChat = localStorage.getItem(key);
+
+    if (savedChat) {
+        document.getElementById("chatMessages").innerHTML = savedChat;
+    } else {
+        let welcome = `<div><strong>${proName}:</strong> Hi! I’ll be handling your service 😊</div>`;
+        document.getElementById("chatMessages").innerHTML = welcome;
+        localStorage.setItem(key, welcome);
+    }
+}
+
+function closeChat() {
+    document.getElementById("chatBox").style.display = "none";
+}
+
+function sendMessage() {
+    let input = document.getElementById("chatInput");
+    let msg = input.value;
+
+    if (msg.trim() === "") return;
+
+    let chat = document.getElementById("chatMessages");
+
+    // ✅ USER MESSAGE (RIGHT SIDE - BLUE)
+    // USER MESSAGE
+    chat.innerHTML += `
+<div class="message user">
+    <div class="bubble">${msg}</div>
+</div>
+`;
+
+    input.value = "";
+
+    let reply = getSmartReply(msg.toLowerCase());
+
+    setTimeout(() => {
+
+        // ✅ PROFESSIONAL MESSAGE (LEFT SIDE - GREY)
+        // PRO MESSAGE
+chat.innerHTML += `
+<div class="message pro">
+    <div class="bubble">${reply}</div>
+</div>
+`;
+
+        chat.scrollTop = chat.scrollHeight;
+
+        saveChat(); // keep history
+
+    }, 800);
+
+    saveChat();
+}
+function saveChat() {
+    let title = document.getElementById("chatTitle").innerText;
+    let key = title.replace(" • ", "_");
+
+    let chatHTML = document.getElementById("chatMessages").innerHTML;
+    localStorage.setItem(key, chatHTML);
+}
+function getSmartReply(msg) {
+
+    // TIME RELATED
+    if (msg.includes("early") || msg.includes("earlier"))
+        return "Sure 👍 I’ll try to come earlier if possible.";
+
+    if (msg.includes("late"))
+        return "Sorry for delay, I’ll reach soon 🚗";
+
+    if (msg.includes("time"))
+        return "What time works best for you?";
+
+    // LOCATION
+    if (msg.includes("where"))
+        return "I’m on the way 👍";
+
+    // GREETINGS
+    if (msg.includes("hi") || msg.includes("hello"))
+        return "Hi 😊 How can I help you?";
+
+    // THANKS
+    if (msg.includes("thanks"))
+        return "You're welcome! 😊";
+
+    // DEFAULT SMART RANDOM
+    let responses = [
+        "Sure 👍",
+        "Okay, noted!",
+        "Got it 😊",
+        "No problem!",
+        "Will do 👍"
+    ];
+
+    return responses[Math.floor(Math.random() * responses.length)];
+}
+</script>
+<style>
+    .message {
+    display: flex;
+    margin: 6px 0;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message.pro {
+    justify-content: flex-start;
+}
+
+.bubble {
+    max-width: 70%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.user .bubble {
+    background: #007bff;
+    color: white;
+}
+
+.pro .bubble {
+    background: #f1f1f1;
+    color: black;
+}
+.chat-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    height: 420px;
+    background: #ffffff;
+    border-radius: 16px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 999;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* HEADER */
+.chat-header {
+    background: linear-gradient(135deg, rgb(163, 163, 185), rgb(51, 51, 139));
+    color: white;
+    padding: 12px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* MESSAGES AREA */
+.chat-messages {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background: #f7f9fc;
+}
+
+/* MESSAGE WRAPPER */
+.message {
+    display: flex;
+    margin: 6px 0;
+}
+
+/* ALIGNMENT */
+.message.user {
+    justify-content: flex-end;
+}
+
+.message.pro {
+    justify-content: flex-start;
+}
+
+/* CHAT BUBBLES */
+.bubble {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* USER (YOU) */
+.user .bubble {
+    background: linear-gradient(135deg, #007bff, #4da3ff);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* PROFESSIONAL */
+.pro .bubble {
+    background: #ffffff;
+    color: #333;
+    border: 1px solid #eee;
+    border-bottom-left-radius: 4px;
+}
+
+/* INPUT AREA */
+.chat-input {
+    display: flex;
+    border-top: 1px solid #eee;
+    background: white;
+}
+
+/* INPUT FIELD */
+.chat-input input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    outline: none;
+    font-size: 14px;
+}
+
+/* SEND BUTTON */
+.chat-input button {
+    background: rgb(24, 24, 46);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.chat-input button:hover {
+    background: rgb(105, 105, 184);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "services/base.html" %}
+{% load static %} 
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Select Payment Method</h2>
+
+    <form method="POST">
+{% csrf_token %}
+
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="payment_method" value="cod" onclick="showPayment('cod')" required>
+    <label class="form-check-label">Cash on Delivery (COD)</label>
+</div>
+
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="payment_method" value="upi" onclick="showPayment('upi')">
+    <label class="form-check-label">UPI</label>
+</div>
+
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="payment_method" value="card" onclick="showPayment('card')">
+    <label class="form-check-label">Credit/Debit Card</label>
+</div>
+
+<!-- 🔥 COD -->
+<div id="codBox" class="payment-box mt-3" style="display:none;">
+    <p class="text-success">✔ Pay at your doorstep after service completion.</p>
+</div>
+
+<!-- 🔥 UPI -->
+<div id="upiBox" class="payment-box mt-3" style="display:none;">
+    <p>Scan QR or use UPI ID:</p>
+    <img src="{% static 'images/qr.webp' %}" width="150">
+    <p class="fw-bold mt-2">urbanconnect2026miniproject@upi</p>
+</div>
+
+<!-- 🔥 CARD -->
+<div id="cardBox" class="payment-box mt-3" style="display:none;">
+    <input type="text" class="form-control mb-2" placeholder="Card Number">
+    <input type="text" class="form-control mb-2" placeholder="Card Holder Name">
+    <input type="text" class="form-control mb-2" placeholder="Expiry Date (MM/YY)">
+    <input type="text" class="form-control mb-2" placeholder="CVV">
+</div>
+
+<button type="submit" class="btn btn-danger mt-4 w-100">
+    Confirm Payment
+</button>
+
+</form>
+</div>
+
+<script>
+function showPayment(method) {
+    document.getElementById('codBox').style.display = 'none';
+    document.getElementById('upiBox').style.display = 'none';
+    document.getElementById('cardBox').style.display = 'none';
+
+    if (method === 'cod') {
+        document.getElementById('codBox').style.display = 'block';
+    } else if (method === 'upi') {
+        document.getElementById('upiBox').style.display = 'block';
+    } else if (method === 'card') {
+        document.getElementById('cardBox').style.display = 'block';
+    }
+}
+</script>
+<style>
+.payment-box {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+{% endblock %}

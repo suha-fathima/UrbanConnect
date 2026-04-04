@@ -1,0 +1,23 @@
+{% extends "services/base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h3 class="fw-bold mb-3">Book {{ service.title }}</h3>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-dark">
+                Confirm Booking
+            </button>
+
+            <a href="/" class="btn btn-secondary ms-2">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
