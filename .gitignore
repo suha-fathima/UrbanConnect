@@ -1,0 +1,24 @@
+# Ignore virtual environments
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Django files
+*.sqlite3
+*.log
+*.pot
+db.sqlite3
+
+# Media files (optional, if you don't want large media pushed)
+media/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+
+# macOS system files
+.DS_Store
