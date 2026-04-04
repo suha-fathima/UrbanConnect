@@ -22,3 +22,11 @@ media/
 
 # macOS system files
 .DS_Store
+
+
+# Other common
+*.egg-info/
+*.pyc
+
+# Static files (optional)
+staticfiles/
