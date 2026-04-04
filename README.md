@@ -72,7 +72,7 @@ python manage.py runserver
 6. Open your browser and go to http://127.0.0.1:8000/ to see the application.
 
 
-📸 Screenshots
+## 📸 Screenshots
 
 Add your screenshots here:
 
@@ -82,11 +82,11 @@ Service detail page
 Mobile view
 
 
-📄 License
+## 📄 License
 
 This project is open-source and free to use for learning purposes.
 
 
-✉️ Contact
+## ✉️ Contact
 
 Suha Fathima – https://github.com/suha-fathima/
