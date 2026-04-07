@@ -32,18 +32,15 @@
 ## 📂 Project Structure
 
 UrbanConnect/
-│
 ├── manage.py                  # Django management commands
 ├── requirements.txt           # Python dependencies
-├── db.sqlite3                 # (Consider ignoring this for GitHub)
 ├── .gitignore                 # Files to ignore
-├── media/                     # User-uploaded files (keep in .gitignore)
-├── services/                  # App managing services
+├── media/                     # User-uploaded files (ignored in GitHub)
+├── services/                  # App for managing services
 ├── urbanconnect/              # Django project settings
 ├── templates/                 # HTML templates
 ├── static/                    # CSS, JS, images
-└── venv/                      # Ignored in GitHub (local virtual env)
----
+└── venv/                      # Local virtual environment (ignored)
 
 ## ⚙️ Setup Instructions
 
