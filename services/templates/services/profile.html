@@ -4,44 +4,40 @@
 
 <style>
     body {
-        background: linear-gradient(135deg, #eef2ff, #f8f9ff);
+        background: url("{% static 'images/profile-bg.avif' %}") no-repeat center center fixed;
+        background-size: cover;
+        font-family: Arial, sans-serif;
     }
 
     .profile-card {
-    max-width: 650px;
-    margin: auto;
-    border-radius: 20px;
-    background: white;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    overflow: visible; /* change from hidden */
-}
+        max-width: 650px;
+        margin: auto;
+        border-radius: 20px;
+        background: white;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        animation: fadeIn 0.6s ease-in-out;
+    }
 
     .profile-header {
-        background: linear-gradient(135deg, #6a5cff, #8f94fb);
+        background: linear-gradient(rgb(198, 95, 95),red,rgb(152, 118, 118));
         color: white;
         text-align: center;
-        padding: 40px 20px 20px;
-        position: relative;
+        padding: 30px 20px;
+        border-radius: 20px 20px 0 0;
     }
 
     .profile-avatar {
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
-        border: 5px solid white;
-        margin-top: -60px;
-        object-fit: cover;
-        background: #fff;
-        margin-top: -5px; 
-    }
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 5px solid white;
+    object-fit: cover;
+    background: #fff;
+    margin-top: 15px;   /* remove negative margin */
+}
 
     .profile-body {
         padding: 30px;
-    }
-
-    .profile-body p {
-        font-size: 15px;
-        margin-bottom: 10px;
     }
 
     .profile-label {
@@ -49,26 +45,42 @@
         color: #555;
     }
 
-    .logout-btn {
-        background: linear-gradient(135deg, #ff4b5c, #ff6b81);
-        border: none;
+    .badge-status {
+        background: #d4edda;
+        color: #155724;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+    }
+
+    .btn-custom {
         border-radius: 10px;
         padding: 10px;
         font-weight: 500;
-        transition: 0.3s;
+    }
+
+    .btn-primary-custom {
+        background: rgb(165, 174, 161);
+        color: white;
+    }
+
+    .btn-primary-custom:hover {
+        background: black;
+    }
+
+    .logout-btn {
+        background: linear-gradient(135deg, #ff4b5c, #ff6b81);
+        color: white;
     }
 
     .logout-btn:hover {
         transform: scale(1.03);
-        box-shadow: 0 5px 15px rgba(255, 75, 92, 0.4);
     }
-    body {
-    background: url("{% static 'images/profile-bg.avif' %}") no-repeat center center fixed;
-    background-size: cover; /* make it cover the whole viewport */
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px);}
+        to { opacity: 1; transform: translateY(0);}
+    }
 </style>
 
 <div class="container mt-5">
@@ -77,19 +89,35 @@
 
         <!-- HEADER -->
         <div class="profile-header">
-            <h4>Welcome Back 👋</h4>
+            {% if user.is_superuser %}
+            <p style="color: white;">Admin </p>
+            {% else %}
+            <p style="color: white;">Customer</p>
+            {% endif %}
+            <h4>Welcome Back, {{ user.username }}!</h4>
+            <p class="mb-0">Your account details</p>
         </div>
 
         <!-- AVATAR -->
         <div class="text-center">
             <img src="{% static 'images/user1.jpg' %}" class="profile-avatar">
             <h3 class="mt-2">{{ user.username }}</h3>
-            <p class="text-muted">Customer</p>
+
+            <!-- Status Badge -->
+            <span class="badge-status">Active Account</span>
+
+            <!-- Edit Button -->
+            <div>
+                <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-primary mt-2">
+                    <i class="bi bi-pencil"></i> Edit Profile
+                </a>
+            </div>
         </div>
 
         <!-- BODY -->
         <div class="profile-body">
 
+            <!-- USER INFO -->
             <p><span class="profile-label">Username:</span> {{ user.username }}</p>
             <p><span class="profile-label">Email:</span> {{ user.email }}</p>
 
@@ -101,9 +129,33 @@
             <p><span class="profile-label">Last Name:</span> {{ user.last_name }}</p>
             {% endif %}
 
-            <a href="{% url 'logout' %}" class="btn logout-btn w-100 mt-4 text-white">
-                <i class="bi bi-box-arrow-right"></i> Logout
+            <!-- Joined Date -->
+            <p>
+                <span class="profile-label">Joined On:</span> 
+                {{ user.date_joined|date:"F d, Y" }}
+            </p>
+
+            <!-- ACTION BUTTONS -->
+            <div class="mt-4 d-flex gap-2 flex-wrap">
+
+                <a href="#" class="btn btn-custom btn-primary-custom w-100">
+                    <i class="bi bi-pencil-square"></i> Edit Details
+                </a>
+
+                <a href="{% url 'password_change' %}" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-lock"></i> Change Password
+                </a>
+
+                <!-- Future Feature -->
+                <a href="{% url 'my_requests' %}" class="btn btn-outline-dark w-100">
+    <i class="bi bi-list-check"></i> My Requests
+</a>
+
+                <a href="{% url 'login' %}" class="btn logout-btn w-100 mt-2">
+            <i class="bi bi-box-arrow-right"></i> Logout
             </a>
+
+            </div>
 
         </div>
 

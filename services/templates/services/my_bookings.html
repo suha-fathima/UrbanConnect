@@ -52,7 +52,7 @@
 
 <div class="container mt-4">
 
-    <h2 class="text-center mb-4">📋 My Bookings</h2>
+    <h2 class="text-center mb-4">My Bookings</h2>
 
     {% if bookings %}
     <table class="table table-bordered text-center align-middle">
@@ -111,7 +111,7 @@
     {% if booking.status == "Confirmed" and booking.professional %}
         <button class="btn btn-sm btn-outline-primary"
                 onclick="openChat('{{ booking.service.title }}', '{{ booking.professional.name }}')">
-            💬 Chat
+             Chat
         </button>
     {% elif booking.status == "Confirmed" %}
         <span class="text-muted">No Professional Assigned</span>
@@ -222,33 +222,38 @@ function getSmartReply(msg) {
 
     // TIME RELATED
     if (msg.includes("early") || msg.includes("earlier"))
-        return "Sure 👍 I’ll try to come earlier if possible.";
+        return "Sure, I’ll try to come earlier if possible.";
 
     if (msg.includes("late"))
-        return "Sorry for delay, I’ll reach soon 🚗";
+        return "Sorry for delay, I’ll reach soon";
 
     if (msg.includes("time"))
         return "What time works best for you?";
 
     // LOCATION
     if (msg.includes("where"))
-        return "I’m on the way 👍";
+        return "I’m on the way!";
 
     // GREETINGS
     if (msg.includes("hi") || msg.includes("hello"))
-        return "Hi 😊 How can I help you?";
+        return "Hi,How can I help you?";
 
     // THANKS
-    if (msg.includes("thanks"))
-        return "You're welcome! 😊";
+    if (msg.includes("thanks")|| msg.includes("thank you"))
+        return "You're welcome!";
+
+    if (msg.includes("See you")|| msg.includes("Bye"))
+        return "Bye.. See you soon!";
+    
+    
 
     // DEFAULT SMART RANDOM
     let responses = [
-        "Sure 👍",
+        "Sure!",
         "Okay, noted!",
-        "Got it 😊",
+        "Got it!",
         "No problem!",
-        "Will do 👍"
+        "Will do!"
     ];
 
     return responses[Math.floor(Math.random() * responses.length)];

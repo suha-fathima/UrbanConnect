@@ -10,6 +10,8 @@ from django.contrib import messages   # add at top of file
 from django.db.models import Q
 from .models import Service, Category
 from .models import Professional
+from django.shortcuts import render
+from .models import Request
 @login_required
 def home(request):
     query = request.GET.get('q')
@@ -345,3 +347,66 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def profile(request):
     return render(request, "services/profile.html")
+
+
+from django.http import JsonResponse
+import json
+from .models import ChatMessage
+from django.contrib.auth.models import User
+
+def send_message(request):
+    data = json.loads(request.body)
+
+    receiver = User.objects.get(username=data['professional'])
+
+    ChatMessage.objects.create(
+        sender=request.user,
+        receiver=receiver,
+        message=data['message']
+    )
+
+    return JsonResponse({"status": "ok"})
+
+
+def get_messages(request):
+    pro = request.GET.get("professional")
+
+    receiver = User.objects.get(username=pro)
+
+    messages = ChatMessage.objects.filter(
+        sender__in=[request.user, receiver],
+        receiver__in=[request.user, receiver]
+    ).order_by("timestamp")
+
+    data = []
+
+    for m in messages:
+        data.append({
+            "text": m.message,
+            "sender": "user" if m.sender == request.user else "pro"
+        })
+
+    return JsonResponse({"messages": data})
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import EditProfileForm
+
+@login_required
+def edit_profile(request):
+    if request.method == "POST":
+        form = EditProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # redirect back to profile page
+    else:
+        form = EditProfileForm(instance=request.user)
+
+    return render(request, 'services/edit_profile.html', {'form': form})
+
+
+def my_requests(request):
+    user_requests = Request.objects.filter(user=request.user)
+    return render(request, 'services/my_requests.html', {'requests': user_requests})
