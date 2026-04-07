@@ -75,8 +75,6 @@ python manage.py runserver
 
 ## **📸 Screenshots**
 
-Add your screenshots here:
-
 - Home page  
 - Services list  
 - Service detail page  
