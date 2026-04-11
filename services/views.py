@@ -6,40 +6,44 @@ from .forms import BookingForm
 from decimal import Decimal
 from datetime import datetime
 from datetime import date
-from django.contrib import messages   # add at top of file
+from django.contrib import messages
 from django.db.models import Q
-from .models import Service, Category
 from .models import Professional
-from django.shortcuts import render
 from .models import Request
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.db.models import Value
+from django.db.models.functions import Lower
+
 @login_required
 def home(request):
-    query = request.GET.get('q')
+    query = request.GET.get('q', '').strip()
 
     services = Service.objects.all()
     categories = Category.objects.all()
-    professionals = Professional.objects.all()  # ⭐ ADD THIS
+    professionals = Professional.objects.all()
 
     if query:
-        services = Service.objects.filter(
-            Q(title__icontains=query) |
-            Q(description__icontains=query) |
-            Q(category__name__icontains=query)
-        )
+        services = Service.objects.annotate(
+        search_field=Lower('title')
+        ).filter(
+        Q(search_field__icontains=query) |
+            Q(description__icontains=query)
+                )
 
         categories = Category.objects.filter(
             name__icontains=query
-        )
+        ).distinct()
 
         professionals = Professional.objects.filter(
-    Q(name__icontains=query) |
-    Q(category__name__icontains=query)
-)
+            Q(name__icontains=query) |
+            Q(category__name__icontains=query)
+        ).distinct()
 
     return render(request, 'services/home.html', {
         'services': services,
         'categories': categories,
-        'professionals': professionals,   # ⭐ ADD THIS
+        'professionals': professionals,
         'query': query
     })
 
@@ -219,7 +223,7 @@ def payment(request):
             booking.status = "Confirmed"
             booking.save()
 
-        # ✅ ADD THIS PART (SUCCESS MESSAGES)
+        # ADD THIS PART (SUCCESS MESSAGES)
         if payment_method == "cod":
             messages.success(request, "Order placed successfully with Cash on Delivery! 💵")
 
@@ -238,7 +242,7 @@ def payment(request):
 
 from django.contrib.auth.decorators import login_required
 
-from decimal import Decimal   # ✅ ADD THIS
+from decimal import Decimal  
 
 @login_required
 def my_bookings(request):
@@ -246,7 +250,7 @@ def my_bookings(request):
 
     for booking in bookings:
         price = booking.service.price
-        tax = price * Decimal('0.10')   # ✅ FIXED
+        tax = price * Decimal('0.10') 
         booking.tax = tax
         booking.total_price = price + tax
 
@@ -315,7 +319,7 @@ def delete_service(request, id):
             request.session['cart'] = cart
             messages.success(request, "Service removed from cart 🗑️")
 
-    return redirect('my_bookings')
+    return redirect('dashboard')
 
 
 def investors(request):
@@ -389,8 +393,6 @@ def get_messages(request):
     return JsonResponse({"messages": data})
 
 
-
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import EditProfileForm
 
@@ -410,3 +412,34 @@ def edit_profile(request):
 def my_requests(request):
     user_requests = Request.objects.filter(user=request.user)
     return render(request, 'services/my_requests.html', {'requests': user_requests})
+from django.shortcuts import render, redirect
+from .models import Review
+
+def reviews(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        rating_text = request.POST.get("rating")
+        comment = request.POST.get("comment")
+
+        rating_map = {
+            "⭐⭐⭐⭐⭐ - Excellent": 5,
+            "⭐⭐⭐⭐ - Very Good": 4,
+            "⭐⭐⭐ - Good": 3,
+            "⭐⭐ - Fair": 2,
+            "⭐ - Poor": 1,
+        }
+
+        rating = rating_map.get(rating_text, 5)
+
+        Review.objects.create(
+            name=name if name else "Anonymous",
+            rating=rating,
+            comment=comment
+        )
+
+        return redirect('reviews')  # ✅ VERY IMPORTANT
+
+    # 👇 THIS MUST ALWAYS RUN
+    reviews = Review.objects.all().order_by('-created_at')
+
+    return render(request, "footer/reviews.html", {"reviews": reviews})

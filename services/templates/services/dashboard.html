@@ -33,7 +33,7 @@ table td, table th {
 
             <!-- LEFT SIDE (TABLE) -->
             <div class="col-md-8">
-    <!-- ✅ Make table scrollable -->
+    <!-- Make table scrollable -->
     <div style="overflow-x:auto;">
         <table class="table align-middle">
 
@@ -76,12 +76,12 @@ table td, table th {
     </select>
 </td>
 
-                    <!-- ✅ FIXED DATE -->
+                    <!-- FIXED DATE -->
                     <td style="min-width:150px;">
                         <input type="date" name="date_{{ forloop.counter }}" class="form-control w-100" required>
                     </td>
 
-                    <!-- ✅ FIXED TIME -->
+                    <!--  FIXED TIME -->
                     <td style="min-width:120px;">
                         <select class="form-select w-100" name="time_{{ forloop.counter }}">
                             <option value="10:00">10:00</option>
@@ -103,7 +103,7 @@ table td, table th {
 
 </form>
 <td>
-    <!-- ✅ Separate form (NOT affected by date validation) -->
+    <!-- Separate form (NOT affected by date validation) -->
     <form method="POST" action="{% url 'delete_service' service.id %}">
         {% csrf_token %}
         <button type="submit"
@@ -173,7 +173,7 @@ function updateSummary() {
     document.getElementById('total').innerText = total.toFixed(2);
 }
 
-// 👇 THIS PART CONNECTS TO YOUR DROPDOWN
+// THIS PART CONNECTS TO YOUR DROPDOWN
 document.querySelectorAll('.professional-select').forEach(dropdown => {
 
     dropdown.addEventListener('change', function () {
@@ -191,7 +191,7 @@ document.querySelectorAll('.professional-select').forEach(dropdown => {
             priceCell.innerText = "₹" + basePrice;
         }
 
-        updateSummary(); // 🔥 update totals
+        updateSummary(); // update totals
     });
 
 });

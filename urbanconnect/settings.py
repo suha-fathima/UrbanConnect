@@ -57,7 +57,7 @@ ROOT_URLCONF = "urbanconnect.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -132,7 +132,7 @@ STATICFILES_DIRS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+PASSWORD_RESET_TIMEOUT = 2109200 
 ASGI_APPLICATION = 'urbanconnect.asgi.application'
 
 CHANNEL_LAYERS = {

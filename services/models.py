@@ -126,3 +126,13 @@ class Request(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.user.username}"
+    
+
+# models.py
+from django.db import models
+
+class Review(models.Model):
+    name = models.CharField(max_length=100, default="Anonymous")
+    rating = models.IntegerField()
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
