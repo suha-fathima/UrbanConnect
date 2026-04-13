@@ -10,10 +10,33 @@ from django.contrib import messages
 from django.db.models import Q
 from .models import Professional
 from .models import Request
-from django.db.models import Q
-from django.contrib.auth.decorators import login_required
+
 from django.db.models import Value
 from django.db.models.functions import Lower
+
+from .forms import EditProfileForm
+
+from django.contrib.auth import login
+
+
+from django.contrib.auth import login, authenticate
+
+from django.contrib.auth.forms import AuthenticationForm
+
+from django.shortcuts import redirect
+
+
+from django.contrib.auth import logout
+
+from django.contrib import messages
+
+from .forms import ProfessionalForm
+
+from django.http import JsonResponse
+import json
+from .models import ChatMessage
+from django.contrib.auth.models import User
+
 
 @login_required
 def home(request):
@@ -53,25 +76,6 @@ def service_list(request):
     return render(request, 'services/service_list.html', {'services': services})
 
 @login_required(login_url='/accounts/login/')
-# def book_service(request, service_id):
-#     service = get_object_or_404(Service, id=service_id)
-
-#     if request.method == "POST":
-#         form = BookingForm(request.POST)
-#         if form.is_valid():
-#             booking = form.save(commit=False)
-#             booking.user = request.user
-#             booking.service = service
-#             booking.save()
-#             return redirect('dashboard')
-#     else:
-#         form = BookingForm()
-
-#     return render(request, 'services/book_service.html', {
-#         'form': form,
-#         'service': service
-#     })
-
 def book_service(request, service_id):
     cart = request.session.get('cart', [])
 
@@ -131,8 +135,6 @@ def checkout(request):
 
     return redirect('dashboard')
 
-from django.contrib.auth.decorators import login_required
-from .models import Booking
 
 
 @login_required
@@ -157,10 +159,6 @@ def dashboard(request):
 
 
 
-from django.contrib.auth.models import User
-from django.contrib.auth import login
-from django.contrib import messages
-
 def signup_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -181,9 +179,7 @@ def signup_view(request):
 
     return render(request, "services/signup.html")
 
-from django.contrib.auth import login, authenticate
 
-from django.contrib.auth.forms import AuthenticationForm
 
 def login_view(request):
     if request.method == 'POST':
@@ -197,9 +193,6 @@ def login_view(request):
     return render(request, 'services/login.html', {'form': form})
 
 
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-from django.contrib import messages
 
 def logout_view(request):
     logout(request)
@@ -207,9 +200,6 @@ def logout_view(request):
     return redirect('login')
 
 
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def payment(request):
@@ -240,9 +230,7 @@ def payment(request):
     return render(request, "services/payment.html")
 
 
-from django.contrib.auth.decorators import login_required
 
-from decimal import Decimal  
 
 @login_required
 def my_bookings(request):
@@ -258,8 +246,6 @@ def my_bookings(request):
         "bookings": bookings
     })
 
-from django.shortcuts import render, get_object_or_404
-from .models import Category, Service
 
 def services_by_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
@@ -270,7 +256,7 @@ def services_by_category(request, slug):
         'services': services
     })
 
-from .models import Category, Service
+
 
 
 
@@ -278,12 +264,7 @@ def all_services(request):
     services = Service.objects.all()
     return render(request, 'services/all_services.html', {'services': services})
 
-from django.contrib.auth import logout
-from django.shortcuts import redirect
 
-
-
-from .forms import ProfessionalForm
 
 def register_professional(request):
     if request.method == 'POST':
@@ -307,8 +288,6 @@ def about(request):
     return render(request, 'services/about.html')
 
 
-from django.shortcuts import redirect
-from django.contrib import messages
 @login_required
 def delete_service(request, id):
     if request.method == "POST":
@@ -346,17 +325,11 @@ def categories(request):
 def contact(request):
     return render(request, 'footer/contact.html')
 
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def profile(request):
     return render(request, "services/profile.html")
 
-
-from django.http import JsonResponse
-import json
-from .models import ChatMessage
-from django.contrib.auth.models import User
 
 def send_message(request):
     data = json.loads(request.body)
@@ -393,8 +366,6 @@ def get_messages(request):
     return JsonResponse({"messages": data})
 
 
-from django.contrib.auth.decorators import login_required
-from .forms import EditProfileForm
 
 @login_required
 def edit_profile(request):
@@ -437,9 +408,9 @@ def reviews(request):
             comment=comment
         )
 
-        return redirect('reviews')  # ✅ VERY IMPORTANT
+        return redirect('reviews')
 
-    # 👇 THIS MUST ALWAYS RUN
+  
     reviews = Review.objects.all().order_by('-created_at')
 
     return render(request, "footer/reviews.html", {"reviews": reviews})
