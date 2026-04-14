@@ -192,10 +192,10 @@
 
     {% url 'dashboard' as dashboard_url %}
     <li class="nav-item">
-        <a class="nav-link {% if request.path == dashboard_url %}active-link{% endif %}" href="{{ dashboard_url }}">
-            Dashboard
-        </a>
-    </li>
+    <a class="nav-link {% if request.path == dashboard_url %}active-link{% endif %}" href="{{ dashboard_url }}">
+        <i class="bi bi-cart3 me-1"></i> My Cart
+    </a>
+</li>
 
     {% url 'my_bookings' as bookings_url %}
     <li class="nav-item">

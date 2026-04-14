@@ -37,6 +37,10 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='services/login.html'), name='login'),
 
      path('accounts/', include('django.contrib.auth.urls')),
+
+    path('request/new/', views.create_request, name='create_request'),
+    path('request/list/', views.request_list, name='request_list'),
+
 ]
 
 

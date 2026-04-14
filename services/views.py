@@ -36,6 +36,8 @@ from django.http import JsonResponse
 import json
 from .models import ChatMessage
 from django.contrib.auth.models import User
+from .forms import RequestForm
+from .models import Request
 
 
 @login_required
@@ -414,3 +416,32 @@ def reviews(request):
     reviews = Review.objects.all().order_by('-created_at')
 
     return render(request, "footer/reviews.html", {"reviews": reviews})
+
+# views.py
+
+
+
+from django.contrib import messages
+
+@login_required
+def create_request(request):
+    if request.method == "POST":
+        form = RequestForm(request.POST)
+        if form.is_valid():
+            req = form.save(commit=False)
+            req.user = request.user
+            req.save()
+
+            messages.success(request, "Request submitted successfully!")  # ✅ ADD THIS
+            return redirect('request_list')
+    else:
+        form = RequestForm()
+
+    return render(request, 'services/create_request.html', {'form': form})
+
+@login_required
+def request_list(request):
+    user_requests = Request.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'services/my_requests.html', {
+    'user_requests': user_requests
+})

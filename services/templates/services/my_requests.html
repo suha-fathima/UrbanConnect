@@ -5,28 +5,45 @@
 <div class="container mt-5">
     <div class="profile-card">
 
-        <!-- HEADER -->
         <div class="profile-header">
             <h4>My Requests</h4>
             <p class="mb-0">Requests submitted by you</p>
         </div>
 
         <div class="profile-body">
-            {% if requests %}
+
+            <a href="{% url 'create_request' %}" class="btn btn-primary w-100 mb-3">
+                <i class="bi bi-plus-circle"></i> New Request 
+            </a>
+
+            {% if user_requests %}
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Title</th>
                             <th>Status</th>
                             <th>Submitted On</th>
+                            <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for req in requests %}
+                        {% for req in user_requests %}
                         <tr>
                             <td>{{ req.title }}</td>
-                            <td>{{ req.status }}</td>
+                            <td>
+                                <span class="
+                                    badge
+                                    {% if req.status == 'Pending' %}bg-warning
+                                    {% elif req.status == 'Approved' %}bg-success
+                                    {% elif req.status == 'Rejected' %}bg-danger
+                                    {% elif req.status == 'Closed' %}bg-secondary
+                                    {% endif %}
+                                ">
+                                    {{ req.status }}
+                                </span>
+                            </td>
                             <td>{{ req.created_at|date:"F d, Y" }}</td>
+                            <td>{{ req.description }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

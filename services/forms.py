@@ -23,3 +23,15 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
+# forms.py
+from django import forms
+from .models import Request
+
+class RequestForm(forms.ModelForm):
+    class Meta:
+        model = Request
+        fields = ['title', 'description']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
