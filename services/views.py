@@ -34,7 +34,6 @@ from .forms import ProfessionalForm
 
 from django.http import JsonResponse
 import json
-from .models import ChatMessage
 from django.contrib.auth.models import User
 from .forms import RequestForm
 from .models import Request
@@ -331,42 +330,6 @@ def contact(request):
 @login_required
 def profile(request):
     return render(request, "services/profile.html")
-
-
-def send_message(request):
-    data = json.loads(request.body)
-
-    receiver = User.objects.get(username=data['professional'])
-
-    ChatMessage.objects.create(
-        sender=request.user,
-        receiver=receiver,
-        message=data['message']
-    )
-
-    return JsonResponse({"status": "ok"})
-
-
-def get_messages(request):
-    pro = request.GET.get("professional")
-
-    receiver = User.objects.get(username=pro)
-
-    messages = ChatMessage.objects.filter(
-        sender__in=[request.user, receiver],
-        receiver__in=[request.user, receiver]
-    ).order_by("timestamp")
-
-    data = []
-
-    for m in messages:
-        data.append({
-            "text": m.message,
-            "sender": "user" if m.sender == request.user else "pro"
-        })
-
-    return JsonResponse({"messages": data})
-
 
 
 @login_required
